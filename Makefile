@@ -4,7 +4,7 @@ FILES= ./src/main.c ./src/utils.c
 CFLAGS= -ggdb -O0 -Wall
 LIBS=
 OBJS=$(FILES:.c=.o)
-DIST= puydoyeux_vincent-SampleVirus
+DIST= puydoyeux_vincent-MyVirus
 
 MyVirus: $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o ./bin/$(EXEC) $(OBJS) $(LIBS)
