@@ -26,6 +26,9 @@ int freeList(Directory *list) {
 		it = it->next;
 		free(del);
 	}
+
+	if (it != NULL)
+		free(it);
 	return 0;
 }
 
@@ -50,6 +53,7 @@ int listDirectories(Directory *list, char *path) {
 				}
 			}
 		}
+		closedir(d);
 	}
 	return 0;
 }

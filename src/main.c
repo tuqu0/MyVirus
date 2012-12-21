@@ -21,6 +21,8 @@ int main (int argc, char **argv) {
 	
 	// list directories	
 	list = (Directory *) malloc(sizeof(Directory));
+	list->next = NULL;
+	list->directory = NULL;
 	listDirectories(list, dir_name);
 	it = list;
 	while (it != NULL && it->directory != NULL) {
