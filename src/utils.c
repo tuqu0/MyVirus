@@ -113,4 +113,5 @@ int setExecutable(char *file) {
 		return -1;
 
 	chmod(file, S_IRWXU);
+	return 0;
 }
