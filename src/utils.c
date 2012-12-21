@@ -115,3 +115,24 @@ int setExecutable(char *file) {
 	chmod(file, S_IRWXU);
 	return 0;
 }
+
+int checkMarker(char *dir) {
+	int ret = -1;
+	char *marker_path = NULL;
+
+	marker_path = (char *) malloc(strlen(dir) + strlen(MARKER) + 2);
+	strcpy(marker_path, dir);
+	strcat(marker_path, "/");
+	strcat(marker_path, MARKER);
+
+	if (dir == NULL)
+		ret = -1;
+	else if(access(marker_path, F_OK) == 0)
+		ret = 0;
+	printf("MARKER : %s\n", MARKER);
+	printf("marker path : %s\n", marker_path);
+	printf("ret : %d\n", ret);
+	
+	free(marker_path);
+	return ret;
+}

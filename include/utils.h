@@ -10,6 +10,8 @@
  #include <string.h>
  #include <sys/stat.h>
 
+ #define MARKER "MyVirus.out"
+
 // An element of a list of directories
  typedef struct Directory_ {
  	struct Directory_ *next;
@@ -38,4 +40,9 @@
  * Set full access on a file for the owner
  */
  int setExecutable(char *file);
+
+ /*
+ * Check is the defined marker is present in the given directory
+ */
+ int checkMarker(char *dir);
 #endif /* UTILIS_H */

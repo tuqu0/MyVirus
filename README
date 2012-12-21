@@ -1,0 +1,35 @@
+*********************************
+Programme : MyVirus
+OS	  : Linux
+Author	  : Vincent Puydoyeux
+********************************
+
+[Sommaire]
+	1. Hierarchie
+	2. Compilation
+	3. Execution
+	4. Comportement
+
+1.[Hierarchie]
+	bin	 => binaire compilé + exemple fichier marqueur
+	src	 => source du programme (fichiers .c)
+	include	 => headers
+
+2.[Compilation]
+	A la racine du répertoire du projet, taper :
+	$ make
+
+3.[Execution]
+	$ ./bin/MyVirus
+	ou
+	$ cd bin && ./MyVirus
+
+4.[Action]
+	Le virus se copie dans les répertoires situés dans le même dossier que lui même.
+	Après chaque copie, le virus exécute le nouveau virus copié, qui va avoir le même
+	comportement.
+
+	Si un marqueur spécifique est présent dans un dossier, le virus ne se copie pas dans
+	ce dossier.
+	Le marqueur définit est un fichier dont le nom "MyVirus.out".
+	Le payload du virus affiche un message "Hello world".
