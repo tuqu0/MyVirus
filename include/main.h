@@ -9,6 +9,9 @@
  #include <limits.h>
  #include "utils.h"
 
- #define MAX 4096
-#define CURRENT_DIR_LEN 256
+ /*
+ * Payload of the virus
+ */
+ void payload();
+
 #endif /* MAIN_H */

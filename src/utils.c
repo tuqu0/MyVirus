@@ -1,71 +1,72 @@
 #include "../include/utils.h"
 
 int addDirectory(Directory *list, Directory *elt) {
-	Directory *it = NULL;
+	Directory *iterator = NULL;
 
-	if (list == NULL || elt == NULL)
-		return -1;
+	iterator = list;
+	while (iterator->next != NULL)
+		iterator = iterator->next;
+	iterator->next = elt;
 
-	it = list;
-	while (it->next != NULL)
-		it=it->next;
-	it->next = elt;
 	return 0;	
 }
 
 int freeList(Directory *list) {
-	Directory *it = NULL;
-	Directory *del = NULL;
+	Directory *iterator = NULL;
+	Directory *delete = NULL;
 
-	if (list == NULL)
-		return 0;
-
-	it = list;
-	while (it->next != NULL) {
-		del = it;
-		it = it->next;
-		free(del);
+	iterator = list;
+	while (iterator->next != NULL) {
+		delete = iterator;
+		iterator = iterator->next;
+		free(delete->directory);
+		free(delete);
 	}
+	free(iterator->directory);
+	free(iterator);
 
-	if (it != NULL)
-		free(it);
 	return 0;
 }
 
-int listDirectories(Directory *list, char *path) {
-	DIR *d;
-	struct dirent *dir;
-	Directory *elt;
+int buildList(Directory *list, char *path) {
+	int ret = -1;
+	char directory_path[PATH_MAX];
+	struct dirent *dir = NULL;
+	Directory *elt = NULL;
+	DIR *root_directory = NULL;
 
-	if (!path)
-		return -1;
-
-	d = opendir(path);
-	if (d) {
-		while ((dir = readdir(d)) != NULL) {
+	root_directory = opendir(path);
+	if (root_directory) {
+		while ((dir = readdir(root_directory)) != NULL) {
 			if (dir->d_type == DT_DIR && strcmp(dir->d_name, "..") && strcmp(dir->d_name, ".")) {
-				if (list->directory == NULL)
-					list->directory = dir->d_name;
+				if (list->directory == NULL) {
+					realpath(dir->d_name, directory_path);
+					list->directory = (char *) malloc(strlen(directory_path) + 1);
+					strcpy(list->directory, directory_path);
+				}
 				else {
 					elt = (Directory *) malloc(sizeof(Directory));
-					elt->directory = dir->d_name;
+					realpath(dir->d_name, directory_path);
+					elt->directory = (char *) malloc(strlen(directory_path) + 1);
+					strcpy(elt->directory, directory_path);
 					addDirectory(list, elt);
 				}
+				memset(directory_path, 0, PATH_MAX);
 			}
 		}
-		closedir(d);
+		closedir(root_directory);
+		ret = 0;
 	}
-	return 0;
+
+	return ret;
 }
 
 int copy(const char *from, const char *to) {
-	int fd_to, fd_from;
-	char buf[4096];
-	ssize_t nread;
+	int fd_to;
+	int fd_from;
 	int saved_errno;
-
-	if (from == NULL || to == NULL)
-		return -1;
+	char buf[PATH_MAX];
+	ssize_t nread;
 
 	fd_from = open(from, O_RDONLY);
 	if (fd_from < 0)
@@ -109,18 +110,17 @@ out_error:
 		close(fd_to);
 
 	errno = saved_errno;
+
 	return -1;
 }
 
 int setExecutable(char *file) {
-	if (file == NULL)
-		return -1;
+	chmod(file, S_IRUSR | S_IXUSR | S_IWUSR);
 
-	chmod(file, S_IRWXU);
 	return 0;
 }
 
-int checkMarker(char *dir) {
+int markerExists(char *dir) {
 	int ret = -1;
 	char *marker_path = NULL;
 
@@ -129,14 +129,10 @@ int checkMarker(char *dir) {
 	strcat(marker_path, "/");
 	strcat(marker_path, MARKER);
 
-	if (dir == NULL)
-		ret = -1;
-	else if(access(marker_path, F_OK) == 0)
+	if(access(marker_path, R_OK) == 0)
 		ret = 0;
-	printf("MARKER : %s\n", MARKER);
-	printf("marker path : %s\n", marker_path);
-	printf("ret : %d\n", ret);
-	
+
 	free(marker_path);
+
 	return ret;
 }

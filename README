@@ -31,5 +31,5 @@ Author	  : Vincent Puydoyeux
 
 	Si un marqueur spécifique est présent dans un dossier, le virus ne se copie pas dans
 	ce dossier.
-	Le marqueur définit est un fichier dont le nom "MyVirus.out".
-	Le payload du virus affiche un message "Hello world".
+	Le marqueur définit est un fichier dont le nom ".MyVirus".
+	Le payload du virus affiche un message "Hello World !" sur la sortie standard.

