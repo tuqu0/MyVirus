@@ -1,7 +1,7 @@
 *********************************
 Programme : MyVirus
 OS	  : Linux
-Author	  : Vincent Puydoyeux
+Auteur	  : Vincent Puydoyeux
 ********************************
 
 [Sommaire]
@@ -11,8 +11,8 @@ Author	  : Vincent Puydoyeux
 	4. Comportement
 
 1.[Hierarchie]
-	bin	 => binaire compilé + exemple fichier marqueur
-	src	 => source du programme (fichiers .c)
+	bin	 => binaire compilé
+	src	 => sources du programme (fichiers .c)
 	include	 => headers
 
 2.[Compilation]
@@ -20,8 +20,6 @@ Author	  : Vincent Puydoyeux
 	$ make
 
 3.[Execution]
-	$ ./bin/MyVirus
-	ou
 	$ cd bin && ./MyVirus
 
 4.[Action]
