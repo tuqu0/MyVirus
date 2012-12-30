@@ -27,10 +27,10 @@
  int freeList(Directory *list);
 
  /* 
- * List all directories in the given path and add them into a list.
+ * List all directories in the current directory and add them into a list.
  * Subdirectories are not included.
  */
- int buildList(Directory *list, char *path);
+ int buildList(Directory *list);
 
  /*
  * Copy a source file at a given destination

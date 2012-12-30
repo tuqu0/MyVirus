@@ -28,14 +28,14 @@ int freeList(Directory *list) {
 	return 0;
 }
 
-int buildList(Directory *list, char *path) {
+int buildList(Directory *list) {
 	int ret = -1;
 	char directory_path[PATH_MAX];
 	struct dirent *dir = NULL;
 	Directory *elt = NULL;
 	DIR *root_directory = NULL;
 
-	root_directory = opendir(path);
+	root_directory = opendir(".");
 	if (root_directory) {
 		while ((dir = readdir(root_directory)) != NULL) {
 			if (dir->d_type == DT_DIR && strcmp(dir->d_name, "..") && strcmp(dir->d_name, ".")) {

@@ -14,12 +14,13 @@ int main (int argc, char **argv) {
 	// init variables
 	filename = basename(argv[0]);
 	root_directory = dirname(argv[0]);
+	chdir(root_directory);
 	
 	// listing directories	
 	list = (Directory *) malloc(sizeof(Directory));
 	list->next = NULL;
 	list->directory = NULL;
-	buildList(list, root_directory);
+	buildList(list);
 
 	// for each directory, copy the program if no marker file found and execute it
 	iterator = list;
