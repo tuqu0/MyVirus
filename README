@@ -13,7 +13,7 @@ Auteur	  : Vincent Puydoyeux
 1.[Hierarchie]
 	bin	 => binaire compilé
 	src	 => sources du programme (fichiers .c)
-	include	 => headers
+	include	 => headers (fichiers .h)
 
 2.[Compilation]
 	A la racine du répertoire du projet, taper :
@@ -24,10 +24,7 @@ Auteur	  : Vincent Puydoyeux
 
 4.[Action]
 	Le virus se copie dans les répertoires situés dans le même dossier que lui même.
-	Après chaque copie, le virus exécute le nouveau virus copié, qui va avoir le même
-	comportement.
-
-	Si un marqueur spécifique est présent dans un dossier, le virus ne se copie pas dans
-	ce dossier.
+	Après chaque copie, le virus exécute le nouveau virus copié, qui va avoir le même comportement.
+	Si un marqueur spécifique est présent dans un dossier, le virus ne se copie pas dans ce dossier.
 	Le marqueur définit est un fichier dont le nom ".MyVirus".
 	Le payload du virus affiche un message "Hello World !" sur la sortie standard.
