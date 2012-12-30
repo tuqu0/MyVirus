@@ -22,7 +22,7 @@ Auteur	  : Vincent Puydoyeux
 3.[Execution]
 	$ cd bin && ./MyVirus
 
-4.[Action]
+4.[Comportement]
 	Le virus se copie dans les répertoires situés dans le même dossier que lui même.
 	Après chaque copie, le virus exécute le nouveau virus copié, qui va avoir le même comportement.
 	Si un marqueur spécifique est présent dans un dossier, le virus ne se copie pas dans ce dossier.
